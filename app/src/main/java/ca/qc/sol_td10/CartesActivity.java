@@ -11,6 +11,7 @@ import java.util.concurrent.Executors;
 import ca.qc.sol_td10.services.CarteSouhaitRestAPI;
 import ca.qc.sol_td10.services.CategorieRestAPI;
 
+
 public class CartesActivity extends AppCompatActivity {
 
     TableLayout tableCartes;

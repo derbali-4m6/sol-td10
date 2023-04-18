@@ -22,17 +22,19 @@ import ca.qc.sol_td10.adapter.CategorieAdapter;
 import ca.qc.sol_td10.entities.Categorie;
 
 public class CategorieRestAPI implements Runnable {
+    //implementer le patron de conception Observateur
+    public interface CommunicationChannel{
+        void loadData(List<Categorie> categories);
+    }
+
+    CommunicationChannel channel;
     String urlPath = "https://derbali-36d8.restdb.io/rest/categories";
     String key = "232ec52be6fc72935ea68431ecf658ba36b5a";
 
     Activity activity;
-    RecyclerView recyclerView;
-    CategorieAdapter adapter;
-    List<Categorie> categories;
-
-    public CategorieRestAPI(Activity activity, RecyclerView recyclerView) {
+    public CategorieRestAPI(Activity activity) {
         this.activity = activity;
-        this.recyclerView = recyclerView;
+        this.channel = (CommunicationChannel) activity;
     }
 
     @Override
@@ -66,14 +68,13 @@ public class CategorieRestAPI implements Runnable {
                 Gson gson = new Gson();
                 Type listType = new TypeToken<ArrayList<Categorie>>(){}.getType();
 
-                categories = gson.fromJson(body, listType);
-                //when list of categories is ready
+                List<Categorie> categories = gson.fromJson(body, listType);
+
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        //update data source of MainActivity
-                        adapter = new CategorieAdapter(categories, activity);
-                        recyclerView.setAdapter(adapter);
+                        //when list of categories is ready
+                        channel.loadData(categories);
                     }
                 });
 

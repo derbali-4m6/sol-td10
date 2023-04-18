@@ -16,9 +16,11 @@ import ca.qc.sol_td10.entities.Categorie;
 import ca.qc.sol_td10.services.CategorieRestAPI;
 import ca.qc.sol_td10.services.ProjetRestAPI;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements CategorieRestAPI.CommunicationChannel {
 
     RecyclerView recyclerView;
+    CategorieAdapter adapter;
+    List<Categorie> categories;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,8 +34,15 @@ public class MainActivity extends AppCompatActivity {
 
         //exécuter de l'appel du service
         ExecutorService service = Executors.newSingleThreadExecutor();
-        service.execute(new CategorieRestAPI(this, recyclerView));
+        service.execute(new CategorieRestAPI(this));
         service.shutdown();
     }
 
+    //cette méthode s'execute quand la liste des catégories est prête
+    @Override
+    public void loadData(List<Categorie> categories) {
+        this.categories = categories;
+        this.adapter = new CategorieAdapter(this.categories, this);
+        this.recyclerView.setAdapter(this.adapter);
+    }
 }
