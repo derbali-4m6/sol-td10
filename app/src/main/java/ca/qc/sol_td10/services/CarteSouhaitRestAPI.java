@@ -97,22 +97,3 @@ public class CarteSouhaitRestAPI implements Runnable {
     }
 }
 
-
-/*
- for (CarteSouhait carte: carteSouhaits) {
-                            //préparer une ligne TableRow
-                            final TableRow tr = new TableRow(activity);
-                            TableLayout.LayoutParams trParams = new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT,  TableLayout.LayoutParams.WRAP_CONTENT);
-                            tr.setPadding(0,0,0,0);
-                            tr.setLayoutParams(trParams);
-
-                            //préparer un affichage TextView
-                            final ImageView imgCarte = new ImageView(activity);
-                            Picasso.get().load(carte.getUrl()).into(imgCarte);
-                            // ajouter le TextView è la ligne
-                            tr.addView(imgCarte);
-
-                            //ajouter la ligne TableRow au tableau TableLayout
-                            tableLayout.addView(tr);
-
-                        }*/

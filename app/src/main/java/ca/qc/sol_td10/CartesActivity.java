@@ -2,7 +2,9 @@ package ca.qc.sol_td10;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -65,9 +67,18 @@ public class CartesActivity extends AppCompatActivity implements CarteSouhaitRes
             }
             //préparer un affichage TextView
             final ImageView imgCarte = new ImageView(this);
-
             Picasso.get().load(carte.getUrl()).resize(350, 450).into(imgCarte);
             imgCarte.setPadding(10, 20, 10, 20);
+            //event click sur la photo
+            imgCarte.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getApplicationContext(), DestinationActivity.class);
+                    intent.putExtra("carteChoisie", carte);
+                    intent.putExtra("categorie", categorie);
+                    startActivity(intent);
+                }
+            });
 
             // ajouter le TextView è la ligne
             tr.addView(imgCarte);
