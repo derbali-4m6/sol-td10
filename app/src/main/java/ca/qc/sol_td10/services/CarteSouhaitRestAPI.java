@@ -27,16 +27,19 @@ import ca.qc.sol_td10.entities.CarteSouhait;
 import ca.qc.sol_td10.entities.Categorie;
 
 public class CarteSouhaitRestAPI implements Runnable {
+    public interface CommunicationChannel{
+        void loadData(List<CarteSouhait> carteSouhaits);
+    }
+
+    CommunicationChannel channel;
     String urlPath = "https://derbali-36d8.restdb.io/rest/cartes-souhaits";
     String key = "232ec52be6fc72935ea68431ecf658ba36b5a";
 
     Activity activity;
-    TableLayout tableLayout;
-    List<CarteSouhait> carteSouhaits;
 
-    public CarteSouhaitRestAPI(Activity activity, TableLayout tableLayout) {
+    public CarteSouhaitRestAPI(Activity activity) {
         this.activity = activity;
-        this.tableLayout = tableLayout;
+        this.channel = (CommunicationChannel) activity;
     }
 
     @Override
@@ -70,29 +73,13 @@ public class CarteSouhaitRestAPI implements Runnable {
                 Gson gson = new Gson();
                 Type listType = new TypeToken<ArrayList<CarteSouhait>>(){}.getType();
 
-                carteSouhaits = gson.fromJson(body, listType);
-                //when list of categories is ready
+                List<CarteSouhait> carteSouhaits = gson.fromJson(body, listType);
+
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        //update display of MainActivity
-                        for (CarteSouhait carte: carteSouhaits) {
-                            //préparer une ligne TableRow
-                            final TableRow tr = new TableRow(activity);
-                            TableLayout.LayoutParams trParams = new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT,  TableLayout.LayoutParams.WRAP_CONTENT);
-                            tr.setPadding(0,0,0,0);
-                            tr.setLayoutParams(trParams);
-
-                            //préparer un affichage TextView
-                            final ImageView imgCarte = new ImageView(activity);
-                            Picasso.get().load(carte.getUrl()).into(imgCarte);
-                            // ajouter le TextView è la ligne
-                            tr.addView(imgCarte);
-
-                            //ajouter la ligne TableRow au tableau TableLayout
-                            tableLayout.addView(tr);
-
-                        }
+                        //when list of categories is ready
+                        channel.loadData(carteSouhaits);
                     }
                 });
 
@@ -109,3 +96,23 @@ public class CarteSouhaitRestAPI implements Runnable {
         }
     }
 }
+
+
+/*
+ for (CarteSouhait carte: carteSouhaits) {
+                            //préparer une ligne TableRow
+                            final TableRow tr = new TableRow(activity);
+                            TableLayout.LayoutParams trParams = new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT,  TableLayout.LayoutParams.WRAP_CONTENT);
+                            tr.setPadding(0,0,0,0);
+                            tr.setLayoutParams(trParams);
+
+                            //préparer un affichage TextView
+                            final ImageView imgCarte = new ImageView(activity);
+                            Picasso.get().load(carte.getUrl()).into(imgCarte);
+                            // ajouter le TextView è la ligne
+                            tr.addView(imgCarte);
+
+                            //ajouter la ligne TableRow au tableau TableLayout
+                            tableLayout.addView(tr);
+
+                        }*/
